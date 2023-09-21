@@ -128,5 +128,25 @@
                 </table>
             </div>
         </div>
+
+        <div class="class-codes panel panel-success">
+            <div class="panel-heading">
+                [[admin/manage/registration:class-codes]]
+            </div>
+            <p class="panel-body">
+                [[admin/manage/registration:class-codes.description]]
+            </p>
+            <div class="table-responsive">
+                <table class="table table-striped users-list">
+                    <thead>
+                        <tr>
+                            <th>[[admin/manage/registration:class-codes.prof-code]]</th>
+                            <th>[[admin/manage/registration:class-codes.ta-code]]</th>
+                            <th>[[admin/manage/registration:class-codes.student-code]]</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
     </div>
 </div>

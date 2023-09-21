@@ -16,5 +16,11 @@
 	"invitations.invitee-email": "Invitee Email",
 	"invitations.invitee-username": "Invitee Username (if registered)",
 
-	"invitations.confirm-delete": "Are you sure you wish to delete this invitation?"
+	"invitations.confirm-delete": "Are you sure you wish to delete this invitation?",
+
+	"class-codes": "Class Codes",
+	"class-codes.description": "Below are the class codes for each group to register for the class.",
+	"class-codes.prof-code": "Professors: prof holder",
+	"class-codes.ta-code": "Teaching Assistans: ta holder",
+	"class-codes.student-code": "Students: student holder"
 } 
