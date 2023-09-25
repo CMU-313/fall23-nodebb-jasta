@@ -593,6 +593,7 @@ install.setup = async function () {
         const adminInfo = await createAdministrator();
         await createGlobalModeratorsGroup();
         await giveGlobalPrivileges();
+        await createInstructorGroup();
         await createMenuItems();
         await createWelcomePost();
         await enableDefaultPlugins();
