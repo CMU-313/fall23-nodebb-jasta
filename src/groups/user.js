@@ -40,6 +40,7 @@ module.exports = function (Groups) {
         const adminModGroups = [
             { name: 'administrators', displayName: 'administrators' },
             { name: 'Global Moderators', displayName: 'Global Moderators' },
+            { name: 'Instructor', displayName: 'Instructor' },
         ];
         // Private (but not hidden)
         const privateGroups = allGroups.filter(group => group.hidden === 0 &&
