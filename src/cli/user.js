@@ -53,6 +53,10 @@ module.exports = () => {
         .description('Make user(s) a global moderator')
         .arguments('<uids...>')
         .action((...args) => execute(userCommands.makeGlobalMod, args));
+    make.command('instructor')
+        .description('Make user(s) an instructor')
+        .arguments('<uids...>')
+        .action((...args) => execute(userCommands.makeInstructor, args));
     make.command('mod')
         .description('Make uid(s) of user(s) moderator of given category IDs (cids)')
         .arguments('<uids...>')

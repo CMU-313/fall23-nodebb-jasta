@@ -153,10 +153,15 @@ User.isGlobalModerator = async function (uid) {
     return await privileges.users.isGlobalModerator(uid);
 };
 
+User.isInstructor = async function (uid) {
+    return await privileges.users.isInstructor(uid);
+}
+
 User.getPrivileges = async function (uid) {
     return await utils.promiseParallel({
         isAdmin: User.isAdministrator(uid),
         isGlobalModerator: User.isGlobalModerator(uid),
+        isInstructor: User.isInstructor(uid),
         isModeratorOfAnyCategory: User.isModeratorOfAnyCategory(uid),
     });
 };
@@ -166,15 +171,16 @@ User.isPrivileged = async function (uid) {
         return false;
     }
     const results = await User.getPrivileges(uid);
-    return results ? (results.isAdmin || results.isGlobalModerator || results.isModeratorOfAnyCategory) : false;
+    return results ? (results.isAdmin || results.isGlobalModerator || results.isInstructor || results.isModeratorOfAnyCategory) : false;
 };
 
 User.isAdminOrGlobalMod = async function (uid) {
-    const [isAdmin, isGlobalMod] = await Promise.all([
+    const [isAdmin, isGlobalMod, isInstructor] = await Promise.all([
         User.isAdministrator(uid),
         User.isGlobalModerator(uid),
+        User.isInstructor(uid),
     ]);
-    return isAdmin || isGlobalMod;
+    return isAdmin || isGlobalMod || isInstructor;
 };
 
 User.isAdminOrSelf = async function (callerUid, uid) {
@@ -200,7 +206,7 @@ async function isSelfOrMethod(callerUid, uid, method) {
 }
 
 User.getAdminsandGlobalMods = async function () {
-    const results = await groups.getMembersOfGroups(['administrators', 'Global Moderators']);
+    const results = await groups.getMembersOfGroups(['administrators', 'Global Moderators', 'Instructor']);
     return await User.getUsersData(_.union(...results));
 };
 
@@ -208,6 +214,7 @@ User.getAdminsandGlobalModsandModerators = async function () {
     const results = await Promise.all([
         groups.getMembers('administrators', 0, -1),
         groups.getMembers('Global Moderators', 0, -1),
+        groups.getMembers('Instructor', 0, -1),
         User.getModeratorUids(),
     ]);
     return await User.getUsersData(_.union(...results));
