@@ -32,6 +32,7 @@ Controllers.authentication = require('./authentication');
 Controllers.api = require('./api');
 Controllers.admin = require('./admin');
 Controllers.globalMods = require('./globalmods');
+Controllers.instructor = require('./instructor');
 Controllers.mods = require('./mods');
 Controllers.sitemap = require('./sitemap');
 Controllers.osd = require('./osd');

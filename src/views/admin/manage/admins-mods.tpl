@@ -17,6 +17,24 @@
 
     <br/>
 
+    <h4><!-- IF instructor.icon --><i class="fa {instructor.icon}"></i> <!-- ENDIF instructor.icon -->[[admin/manage/admins-mods:administrators]]</h4>
+    <div class="instructor-area">
+    <!-- BEGIN instructor.members -->
+        <div class="user-card pull-left" data-uid="{instructor.members.uid}">
+            <!-- IF instructor.members.picture -->
+            <img class="avatar avatar-sm" src="{instructor.members.picture}" alt="" />
+            <!-- ELSE -->
+            <div class="avatar avatar-sm" style="background-color: {instructor.members.icon:bgColor};">{instructor.members.icon:text}</div>
+            <!-- ENDIF instructor.members.picture -->
+            <a href="{config.relative_path}/user/{instructor.members.userslug}">{instructor.members.username}</a>
+            <i class="remove-user-icon fa fa-times" role="button"></i>
+        </div>
+    <!-- END instructor.members -->
+    </div>
+    <input id="instructor-search" class="form-control" placeholder="[[admin/manage/admins-mods:add-administrator]]" />
+
+    <br/>
+
     <h4><!-- IF globalMods.icon --><i class="fa {globalMods.icon}"></i> <!-- ENDIF globalMods.icon -->[[admin/manage/admins-mods:global-moderators]]</h4>
     <div class="global-moderator-area">
     <!-- BEGIN globalMods.members -->

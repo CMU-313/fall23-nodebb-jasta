@@ -816,7 +816,7 @@ Flags.notify = async function (flagObj, uid, notifySelf = false) {
         groups.getMembers('Global Moderators', 0, -1),
         groups.getMembers('Instructor', 0, -1),
     ]);
-    let uids = admins.concat(globalMods);
+    let uids = admins.concat(globalMods).concat(instructor);
     let notifObj = null;
 
     const { displayname } = flagObj.reports[flagObj.reports.length - 1].reporter;

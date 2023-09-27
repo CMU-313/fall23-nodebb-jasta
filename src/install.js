@@ -433,7 +433,7 @@ async function giveGlobalPrivileges() {
     ]), 'Global Moderators');
     await privileges.global.give(defaultPrivileges.concat([
         'groups:ban', 'groups:upload:post:file', 'groups:view:users:info',
-    ]), 'Instructors');
+    ]), 'Instructor');
     await privileges.global.give(['groups:view:users', 'groups:view:tags', 'groups:view:groups'], 'guests');
     await privileges.global.give(['groups:view:users', 'groups:view:tags', 'groups:view:groups'], 'spiders');
 }
@@ -595,8 +595,8 @@ install.setup = async function () {
         await createDefaultUserGroups();
         const adminInfo = await createAdministrator();
         await createGlobalModeratorsGroup();
-        await giveGlobalPrivileges();
         await createInstructorGroup();
+        await giveGlobalPrivileges();
         await createMenuItems();
         await createWelcomePost();
         await enableDefaultPlugins();

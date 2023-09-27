@@ -16,7 +16,7 @@ define('forum/account/header', [
     let isAdminOrSelfOrGlobalMod;
 
     AccountHeader.init = function () {
-        isAdminOrSelfOrGlobalMod = ajaxify.data.isAdmin || ajaxify.data.isSelf || ajaxify.data.isGlobalModerator;
+        isAdminOrSelfOrGlobalMod = ajaxify.data.isAdmin || ajaxify.data.isSelf || ajaxify.data.isGlobalModerator || ajaxify.data.isInstructor;
 
         hidePrivateLinks();
         selectActivePill();

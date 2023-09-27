@@ -55,6 +55,11 @@ _mounts.globalMod = (app, middleware, controllers) => {
     setupPageRoute(app, '/registration-queue', [], controllers.globalMods.registrationQueue);
 };
 
+_mounts.instructor = (app, middleware, controllers) => {
+    setupPageRoute(app, '/ip-blacklist', [], controllers.instructor.ipBlacklist);
+    setupPageRoute(app, '/registration-queue', [], controllers.instructor.registrationQueue);
+}
+
 _mounts.topic = (app, name, middleware, controllers) => {
     setupPageRoute(app, `/${name}/:topic_id/:slug/:post_index?`, [], controllers.topics.get);
     setupPageRoute(app, `/${name}/:topic_id/:slug?`, [], controllers.topics.get);
@@ -163,6 +168,7 @@ function addCoreRoutes(app, router, middleware, mounts) {
     _mounts.main(router, middleware, controllers);
     _mounts.mod(router, middleware, controllers);
     _mounts.globalMod(router, middleware, controllers);
+    _mounts.instructor(router, middleware, controllers);
 
     addRemountableRoutes(app, router, middleware, mounts);
 
