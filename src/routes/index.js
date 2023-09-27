@@ -58,12 +58,12 @@ _mounts.globalMod = (app, middleware, controllers) => {
 _mounts.instructor = (app, middleware, controllers) => {
     setupPageRoute(app, '/ip-blacklist', [], controllers.instructor.ipBlacklist);
     setupPageRoute(app, '/registration-queue', [], controllers.instructor.registrationQueue);
-}
+};
 
 _mounts.TA = (app, middleware, controllers) => {
     setupPageRoute(app, '/ip-blacklist', [], controllers.TA.ipBlacklist);
     setupPageRoute(app, '/registration-queue', [], controllers.TA.registrationQueue);
-}
+};
 
 _mounts.topic = (app, name, middleware, controllers) => {
     setupPageRoute(app, `/${name}/:topic_id/:slug/:post_index?`, [], controllers.topics.get);

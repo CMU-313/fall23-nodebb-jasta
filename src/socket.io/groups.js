@@ -279,7 +279,8 @@ async function canModifyGroup(uid, groupName) {
         isTA: user.isTA(uid),
     });
 
-    if (!(results.isOwner || results.hasAdminPrivilege || results.isInstructor || results.isTA || (results.isGlobalMod && !results.system))) {
+    if (!(results.isOwner || results.hasAdminPrivilege || results.isInstructor || results.isTA || 
+        (results.isGlobalMod && !results.system))) {
         throw new Error('[[error:no-privileges]]');
     }
 }

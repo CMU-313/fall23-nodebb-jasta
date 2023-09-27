@@ -155,11 +155,11 @@ User.isGlobalModerator = async function (uid) {
 
 User.isInstructor = async function (uid) {
     return await privileges.users.isInstructor(uid);
-}
+};
 
 User.isTA = async function (uid) {
     return await privileges.users.isTA(uid);
-}
+};
 
 
 User.getPrivileges = async function (uid) {
@@ -177,7 +177,8 @@ User.isPrivileged = async function (uid) {
         return false;
     }
     const results = await User.getPrivileges(uid);
-    return results ? (results.isAdmin || results.isGlobalModerator || results.isInstructor || results.isTA || results.isModeratorOfAnyCategory) : false;
+    return results ? (results.isAdmin || results.isGlobalModerator || results.isInstructor || 
+        results.isTA || results.isModeratorOfAnyCategory) : false;
 };
 
 User.isAdminOrGlobalMod = async function (uid) {

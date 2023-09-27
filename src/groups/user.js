@@ -48,7 +48,7 @@ module.exports = function (Groups) {
         const privateGroups = allGroups.filter(group => group.hidden === 0 &&
             group.system === 0 && group.private === 1);
 
-        const [ownership, isAdmin, isInstructor, isGlobalMod] = await Promise.all([
+        const [ownership, isAdmin, isInstructor, isTA, isGlobalMod] = await Promise.all([
             Promise.all(privateGroups.map(group => Groups.ownership.isOwner(uid, group.name))),
             user.isAdministrator(uid),
             user.isInstructor(uid),

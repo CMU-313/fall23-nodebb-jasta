@@ -184,7 +184,9 @@ async function getNotificationSettings(userData) {
     if (privileges.isAdmin) {
         privilegedTypes.push('notificationType_new-register');
     }
-    if (privileges.isAdmin || privileges.isInstructor || privileges.isGlobalMod || priviliges.isTA || privileges.isModeratorOfAnyCategory) {
+    if (privileges.isAdmin || privileges.isInstructor || privileges.isGlobalMod || privileges.isModeratorOfAnyCategory) {
+        privilegedTypes.push('notificationType_post-queue', 'notificationType_new-post-flag');
+    } else if (privileges.isTA) {
         privilegedTypes.push('notificationType_post-queue', 'notificationType_new-post-flag');
     }
     if (privileges.isAdmin || privileges.isInstructor || privileges.isTA || privileges.isGlobalMod) {

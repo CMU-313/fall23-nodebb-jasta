@@ -131,7 +131,7 @@ usersController.getUsers = async function (set, uid, query) {
         user.isAdministrator(uid),
         user.isGlobalModerator(uid),
         user.isInstructor(uid),
-        user.isTA(uid),   
+        user.isTA(uid),
         privileges.global.can('search:users', uid),
         usersController.getUsersAndCount(set, uid, start, stop),
     ]);

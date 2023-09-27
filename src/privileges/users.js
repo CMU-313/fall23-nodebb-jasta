@@ -21,11 +21,11 @@ privsUsers.isGlobalModerator = async function (uid) {
 
 privsUsers.isInstructor = async function (uid) {
     return await isGroupMember(uid, 'Instructor');
-}
+};
 
 privsUsers.isTA = async function (uid) {
     return await isGroupMember(uid, 'TA');
-}
+};
 
 async function isGroupMember(uid, groupName) {
     return await groups[Array.isArray(uid) ? 'isMembers' : 'isMember'](uid, groupName);

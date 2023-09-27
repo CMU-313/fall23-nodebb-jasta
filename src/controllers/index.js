@@ -189,8 +189,6 @@ Controllers.register = async function (req, res, next) {
                     html: `
                         <select class="form-control" name="account-type" aria-label="Account Type">
                             <option value="student" selected>Student</option>
-                            <option value="instructor">Instructor</option>
-                            <option value="ta">TA</option>
                         </select>
                     `,
                 },

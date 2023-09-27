@@ -127,7 +127,8 @@ middleware.renderHeader = async function renderHeader(req, res, data) {
     templateValues.isInstructor = results.user.isInstructor;
     templateValues.isTA = results.user.isTA;
     templateValues.isGlobalMod = results.user.isGlobalMod;
-    templateValues.showModMenu = results.user.isAdmin || results.user.isInstructor || results.user.isGlobalMod || resurts.user.isTA || results.user.isMod;
+    templateValues.showModMenu = (results.user.isAdmin || results.user.isInstructor) ||
+        (results.user.isGlobalMod || results.user.isTA || results.user.isMod);
     templateValues.canChat = results.privileges.chat && meta.config.disableChat !== 1;
     templateValues.user = results.user;
     templateValues.userJSON = jsesc(JSON.stringify(results.user), { isScriptContext: true });
