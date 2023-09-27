@@ -34,6 +34,7 @@ Groups.systemGroups = [
     'administrators',
     'Global Moderators',
     'Instructor',
+    'TA'
 ];
 
 Groups.getEphemeralGroup = function (groupName) {

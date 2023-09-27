@@ -105,6 +105,7 @@ postsAPI.edit = async function (caller, data) {
         'administrators',
         'Global Moderators',
         'Instructors',
+        'TA',
         `cid:${editResult.topic.cid}:privileges:moderate`,
         `cid:${editResult.topic.cid}:privileges:groups:moderate`,
     ]);

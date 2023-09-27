@@ -157,11 +157,17 @@ User.isInstructor = async function (uid) {
     return await privileges.users.isInstructor(uid);
 }
 
+User.isTA = async function (uid) {
+    return await privileges.users.isTA(uid);
+}
+
+
 User.getPrivileges = async function (uid) {
     return await utils.promiseParallel({
         isAdmin: User.isAdministrator(uid),
         isGlobalModerator: User.isGlobalModerator(uid),
         isInstructor: User.isInstructor(uid),
+        isTA: User.isTA(uid),
         isModeratorOfAnyCategory: User.isModeratorOfAnyCategory(uid),
     });
 };
@@ -171,16 +177,17 @@ User.isPrivileged = async function (uid) {
         return false;
     }
     const results = await User.getPrivileges(uid);
-    return results ? (results.isAdmin || results.isGlobalModerator || results.isInstructor || results.isModeratorOfAnyCategory) : false;
+    return results ? (results.isAdmin || results.isGlobalModerator || results.isInstructor || results.isTA || results.isModeratorOfAnyCategory) : false;
 };
 
 User.isAdminOrGlobalMod = async function (uid) {
-    const [isAdmin, isGlobalMod, isInstructor] = await Promise.all([
+    const [isAdmin, isGlobalMod, isInstructor, isTA] = await Promise.all([
         User.isAdministrator(uid),
         User.isGlobalModerator(uid),
         User.isInstructor(uid),
+        User.isTA(uid),
     ]);
-    return isAdmin || isGlobalMod || isInstructor;
+    return isAdmin || isGlobalMod || isInstructor || isTA;
 };
 
 User.isAdminOrSelf = async function (callerUid, uid) {
@@ -206,7 +213,7 @@ async function isSelfOrMethod(callerUid, uid, method) {
 }
 
 User.getAdminsandGlobalMods = async function () {
-    const results = await groups.getMembersOfGroups(['administrators', 'Global Moderators', 'Instructor']);
+    const results = await groups.getMembersOfGroups(['administrators', 'Global Moderators', 'Instructor', 'TA']);
     return await User.getUsersData(_.union(...results));
 };
 
@@ -215,6 +222,7 @@ User.getAdminsandGlobalModsandModerators = async function () {
         groups.getMembers('administrators', 0, -1),
         groups.getMembers('Global Moderators', 0, -1),
         groups.getMembers('Instructor', 0, -1),
+        groups.getMembers('TA', 0, -1),
         User.getModeratorUids(),
     ]);
     return await User.getUsersData(_.union(...results));

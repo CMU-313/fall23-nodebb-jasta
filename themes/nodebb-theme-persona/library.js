@@ -40,8 +40,8 @@ library.addProfileItem = async (data) => {
             self: true,
             other: false,
             moderator: false,
-            globalMod: false,
             instructor: false,
+            TA: false,
             admin: false,
         },
     });

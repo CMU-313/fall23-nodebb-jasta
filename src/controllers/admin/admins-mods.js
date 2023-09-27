@@ -27,11 +27,12 @@ AdminsMods.get = async function (req, res) {
     const selectedCategory = rootCid ? await categories.getCategoryData(rootCid) : null;
     const pageCategories = await categories.getCategoriesData(cids);
 
-    const [admins, globalMods, moderators, instructor, crumbs] = await Promise.all([
+    const [admins, globalMods, moderators, instructor, TA, crumbs] = await Promise.all([
         groups.get('administrators', { uid: req.uid }),
         groups.get('Global Moderators', { uid: req.uid }),
         getModeratorsOfCategories(pageCategories),
         groups.get('Instructor', { uid: req.uid }),
+        groups.get('TA', { uid: req.uid }),
         categoriesController.buildBreadCrumbs(selectedCategory, '/admin/manage/admins-mods'),
     ]);
 
@@ -39,6 +40,7 @@ AdminsMods.get = async function (req, res) {
         admins: admins,
         globalMods: globalMods,
         instructor: instructor,
+        TA: TA,
         categoryMods: moderators,
         selectedCategory: selectedCategory,
         pagination: pagination.create(page, pageCount, req.query),

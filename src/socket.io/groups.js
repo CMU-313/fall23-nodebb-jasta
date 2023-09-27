@@ -223,16 +223,17 @@ SocketGroups.loadMoreMembers = async (socket, data) => {
 };
 
 async function canSearchMembers(uid, groupName) {
-    const [isHidden, isMember, hasAdminPrivilege, isGlobalMod, isInstructor, viewGroups] = await Promise.all([
+    const [isHidden, isMember, hasAdminPrivilege, isGlobalMod, isInstructor, isTA, viewGroups] = await Promise.all([
         groups.isHidden(groupName),
         groups.isMember(uid, groupName),
         privileges.admin.can('admin:groups', uid),
         user.isGlobalModerator(uid),
         user.isInstructor(uid),
+        user.isTA(uid),
         privileges.global.can('view:groups', uid),
     ]);
 
-    if (!viewGroups || (isHidden && !isMember && !hasAdminPrivilege && !isGlobalMod && !isInstructor)) {
+    if (!viewGroups || (isHidden && !isMember && !hasAdminPrivilege && !isGlobalMod && !isInstructor && !isTA)) {
         throw new Error('[[error:no-privileges]]');
     }
 }
@@ -275,9 +276,10 @@ async function canModifyGroup(uid, groupName) {
         hasAdminPrivilege: privileges.admin.can('admin:groups', uid),
         isGlobalMod: user.isGlobalModerator(uid),
         isInstructor: user.isInstructor(uid),
+        isTA: user.isTA(uid),
     });
 
-    if (!(results.isOwner || results.hasAdminPrivilege || results.isInstructor || (results.isGlobalMod && !results.system))) {
+    if (!(results.isOwner || results.hasAdminPrivilege || results.isInstructor || results.isTA || (results.isGlobalMod && !results.system))) {
         throw new Error('[[error:no-privileges]]');
     }
 }

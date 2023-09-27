@@ -121,6 +121,7 @@ export type Visibility = {
   moderator: boolean;
   globalMod: boolean;
   instructor: boolean;
+  TA: boolean,
   admin: boolean;
   canViewInfo: boolean;
 };

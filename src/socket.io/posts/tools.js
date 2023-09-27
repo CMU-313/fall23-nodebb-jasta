@@ -44,9 +44,9 @@ module.exports = function (SocketPosts) {
         postData.display_purge_tools = results.canPurge;
         postData.display_flag_tools = socket.uid && results.canFlag.flag;
         postData.display_moderator_tools = postData.display_edit_tools || postData.display_delete_tools;
-        postData.display_move_tools = results.isAdmin || results.isModerator || results.isInstructor;
+        postData.display_move_tools = results.isAdmin || results.isModerator || results.isInstructor || results.isTA;
         postData.display_change_owner_tools = results.isAdmin || results.isModerator || results.isInstructor;
-        postData.display_ip_ban = (results.isAdmin || results.isGlobalMod || results.isInstructor) && !postData.selfPost;
+        postData.display_ip_ban = (results.isAdmin || results.isGlobalMod || results.isInstructor || results.isTA) && !postData.selfPost;
         postData.display_history = results.history;
         postData.flags = {
             flagId: parseInt(results.posts.flagId, 10) || null,

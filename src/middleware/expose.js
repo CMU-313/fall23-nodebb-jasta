@@ -27,6 +27,7 @@ module.exports = function (middleware) {
         const hash = await utils.promiseParallel({
             isAdmin: user.isAdministrator(req.user.uid),
             isInstructor: user.isInstructor(req.user.uid),
+            isTA: user.isTA(req.user.uid),
             isGmod: user.isGlobalModerator(req.user.uid),
             isPrivileged: user.isPrivileged(req.user.uid),
         });

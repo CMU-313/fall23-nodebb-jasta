@@ -78,7 +78,9 @@ middleware.renderHeader = async function renderHeader(req, res, data) {
     const results = await utils.promiseParallel({
         isAdmin: user.isAdministrator(req.uid),
         isInstructor: user.isInstructor(req.uid),
+        isTA: user.isTA(req.uid),
         isGlobalMod: user.isGlobalModerator(req.uid),
+        isTA: user.isTA(req.uid),
         isModerator: user.isModeratorOfAnyCategory(req.uid),
         privileges: privileges.global.get(req.uid),
         user: user.getUserData(req.uid),
@@ -99,6 +101,7 @@ middleware.renderHeader = async function renderHeader(req, res, data) {
     results.user.unreadData = unreadData;
     results.user.isAdmin = results.isAdmin;
     results.user.isInstructor = results.isInstructor;
+    results.user.isTA = results.isTA;
     results.user.isGlobalMod = results.isGlobalMod;
     results.user.isMod = !!results.isModerator;
     results.user.privileges = results.privileges;
@@ -122,8 +125,9 @@ middleware.renderHeader = async function renderHeader(req, res, data) {
     }));
     templateValues.isAdmin = results.user.isAdmin;
     templateValues.isInstructor = results.user.isInstructor;
+    templateValues.isTA = results.user.isTA;
     templateValues.isGlobalMod = results.user.isGlobalMod;
-    templateValues.showModMenu = results.user.isAdmin || results.user.isInstructor || results.user.isGlobalMod || results.user.isMod;
+    templateValues.showModMenu = results.user.isAdmin || results.user.isInstructor || results.user.isGlobalMod || resurts.user.isTA || results.user.isMod;
     templateValues.canChat = results.privileges.chat && meta.config.disableChat !== 1;
     templateValues.user = results.user;
     templateValues.userJSON = jsesc(JSON.stringify(results.user), { isScriptContext: true });
