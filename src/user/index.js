@@ -200,13 +200,14 @@ async function isSelfOrMethod(callerUid, uid, method) {
 }
 
 User.getAdminsandGlobalMods = async function () {
-    const results = await groups.getMembersOfGroups(['administrators', 'Global Moderators']);
+    const results = await groups.getMembersOfGroups(['administrators', 'Instructor', 'Global Moderators']);
     return await User.getUsersData(_.union(...results));
 };
 
 User.getAdminsandGlobalModsandModerators = async function () {
     const results = await Promise.all([
         groups.getMembers('administrators', 0, -1),
+        groups.getMembers('Instructor', 0, -1),
         groups.getMembers('Global Moderators', 0, -1),
         User.getModeratorUids(),
     ]);
