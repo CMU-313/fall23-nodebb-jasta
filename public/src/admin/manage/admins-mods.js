@@ -43,6 +43,39 @@ define('admin/manage/admins-mods', [
             });
         });
 
+        autocomplete.user($('#instructor-search'), function (ev, ui) {
+            api.put('/groups/instructor/membership/' + ui.item.user.uid).then(() => {
+                alerts.success('[[admin/manage/users:alerts.make-instructor-success]]');
+                $('#instructor-search').val('');
+
+                if ($('.instructor-area [data-uid="' + ui.item.user.uid + '"]').length) {
+                    return;
+                }
+
+                app.parseAndTranslate('admin/manage/admins-mods', 'instructor.members', { instructor: { members: [ui.item.user] } }, function (html) {
+                    $('.instructor-area').prepend(html);
+                    $('#no-instructor-warning').addClass('hidden');
+                });
+            }).catch(alerts.error);
+        });
+
+        $('.instructor-area').on('click', '.remove-user-icon', function () {
+            const userCard = $(this).parents('[data-uid]');
+            const uid = userCard.attr('data-uid');
+
+            bootbox.confirm('[[admin/manage/users:alerts.confirm-remove-instructor]]', function (confirm) {
+                if (confirm) {
+                    api.del('/groups/instructor/membership/' + uid).then(() => {
+                        alerts.success('[[admin/manage/users:alerts.remove-instructor-success]]');
+                        userCard.remove();
+                        if (!$('.instructor-area').children().length) {
+                            $('#no-instructor-warning').removeClass('hidden');
+                        }
+                    }).catch(alerts.error);
+                }
+            });
+        });
+
         autocomplete.user($('#global-mod-search'), function (ev, ui) {
             api.put('/groups/global-moderators/membership/' + ui.item.user.uid).then(() => {
                 alerts.success('[[admin/manage/users:alerts.make-global-mod-success]]');

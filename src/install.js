@@ -594,6 +594,7 @@ install.setup = async function () {
         await createCategories();
         await createDefaultUserGroups();
         const adminInfo = await createAdministrator();
+        await createInstructorGroup();
         await createGlobalModeratorsGroup();
         await giveGlobalPrivileges();
         await createMenuItems();

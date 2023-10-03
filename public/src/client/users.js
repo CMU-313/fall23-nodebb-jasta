@@ -94,7 +94,8 @@ define('forum/users', [
             data.users = data.users.slice(0, searchResultCount);
         }
 
-        data.isAdminOrGlobalMod = app.user.isAdmin || app.user.isGlobalMod;
+        // added instructor to isAdminOrGlobalMod check
+        data.isAdminOrGlobalMod = app.user.isAdmin || app.user.isInstructor || app.user.isGlobalMod;
         app.parseAndTranslate('users', 'users', data, function (html) {
             $('#users-container').html(html);
             html.find('span.timeago').timeago();
