@@ -55,9 +55,9 @@ module.exports = function (Groups) {
         const ownGroups = privateGroups.filter((group, index) => ownership[index]);
 
         let inviteGroups = [];
-        if (isAdmin) {
+        if (isAdmin || isInstructor) {
             inviteGroups = inviteGroups.concat(adminModGroups).concat(privateGroups);
-        } else if (isGlobalMod || isInstructor) {
+        } else if (isGlobalMod) {
             inviteGroups = inviteGroups.concat(privateGroups);
         } else {
             inviteGroups = inviteGroups.concat(ownGroups);
