@@ -39,15 +39,17 @@ module.exports = function (Groups) {
         const publicGroups = allGroups.filter(group => group.hidden === 0 && group.system === 0 && group.private === 0);
         const adminModGroups = [
             { name: 'administrators', displayName: 'administrators' },
+            { name: 'Instructor', displayName: 'Instructor' },
             { name: 'Global Moderators', displayName: 'Global Moderators' },
         ];
         // Private (but not hidden)
         const privateGroups = allGroups.filter(group => group.hidden === 0 &&
             group.system === 0 && group.private === 1);
 
-        const [ownership, isAdmin, isGlobalMod] = await Promise.all([
+        const [ownership, isAdmin, isInstructor, isGlobalMod] = await Promise.all([
             Promise.all(privateGroups.map(group => Groups.ownership.isOwner(uid, group.name))),
             user.isAdministrator(uid),
+            user.isInstructor(uid),
             user.isGlobalModerator(uid),
         ]);
         const ownGroups = privateGroups.filter((group, index) => ownership[index]);
@@ -55,7 +57,7 @@ module.exports = function (Groups) {
         let inviteGroups = [];
         if (isAdmin) {
             inviteGroups = inviteGroups.concat(adminModGroups).concat(privateGroups);
-        } else if (isGlobalMod) {
+        } else if (isGlobalMod || isInstructor) {
             inviteGroups = inviteGroups.concat(privateGroups);
         } else {
             inviteGroups = inviteGroups.concat(ownGroups);
