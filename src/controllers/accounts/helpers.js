@@ -136,7 +136,7 @@ async function getAllData(uid, callerUID) {
         isTargetAdmin: user.isAdministrator(uid),
         userSettings: user.getSettings(uid),
         isAdmin: user.isAdministrator(callerUID),
-        isInstructor: user.isInstructor(calledUID),
+        isInstructor: user.isInstructor(callerUID),
         isGlobalModerator: user.isGlobalModerator(callerUID),
         isModerator: user.isModeratorOfAnyCategory(callerUID),
         isFollowing: user.isFollowing(callerUID, uid),
