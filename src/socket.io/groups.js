@@ -43,13 +43,14 @@ async function isOwner(socket, data) {
     }
     const results = await utils.promiseParallel({
         hasAdminPrivilege: privileges.admin.can('admin:groups', socket.uid),
+        isInstructor: privileges.isInstructor(socket.uid),
         isGlobalModerator: user.isGlobalModerator(socket.uid),
         isOwner: groups.ownership.isOwner(socket.uid, data.groupName),
         group: groups.getGroupData(data.groupName),
     });
 
     const isOwner = results.isOwner ||
-        results.hasAdminPrivilege ||
+        results.hasAdminPrivilege || isInstructor ||
         (results.isGlobalModerator && !results.group.system);
     if (!isOwner) {
         throw new Error('[[error:no-privileges]]');
@@ -222,15 +223,16 @@ SocketGroups.loadMoreMembers = async (socket, data) => {
 };
 
 async function canSearchMembers(uid, groupName) {
-    const [isHidden, isMember, hasAdminPrivilege, isGlobalMod, viewGroups] = await Promise.all([
+    const [isHidden, isMember, hasAdminPrivilege, isInstructor, isGlobalMod, viewGroups] = await Promise.all([
         groups.isHidden(groupName),
         groups.isMember(uid, groupName),
         privileges.admin.can('admin:groups', uid),
+        user.isInstructor(uid),
         user.isGlobalModerator(uid),
         privileges.global.can('view:groups', uid),
     ]);
 
-    if (!viewGroups || (isHidden && !isMember && !hasAdminPrivilege && !isGlobalMod)) {
+    if (!viewGroups || (isHidden && !isMember && !hasAdminPrivilege && !isInstructor && !isGlobalMod)) {
         throw new Error('[[error:no-privileges]]');
     }
 }
@@ -271,10 +273,11 @@ async function canModifyGroup(uid, groupName) {
         isOwner: groups.ownership.isOwner(uid, groupName),
         system: groups.getGroupField(groupName, 'system'),
         hasAdminPrivilege: privileges.admin.can('admin:groups', uid),
+        isInstructor: user.isInstructor(uid),
         isGlobalMod: user.isGlobalModerator(uid),
     });
 
-    if (!(results.isOwner || results.hasAdminPrivilege || (results.isGlobalMod && !results.system))) {
+    if (!(results.isOwner || results.hasAdminPrivilege || results.isInstructor || (results.isGlobalMod && !results.system))) {
         throw new Error('[[error:no-privileges]]');
     }
 }

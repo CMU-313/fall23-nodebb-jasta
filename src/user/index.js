@@ -160,6 +160,7 @@ User.isGlobalModerator = async function (uid) {
 User.getPrivileges = async function (uid) {
     return await utils.promiseParallel({
         isAdmin: User.isAdministrator(uid),
+        isInstructor: User.isInstructor(uid),
         isGlobalModerator: User.isGlobalModerator(uid),
         isModeratorOfAnyCategory: User.isModeratorOfAnyCategory(uid),
     });
@@ -170,15 +171,16 @@ User.isPrivileged = async function (uid) {
         return false;
     }
     const results = await User.getPrivileges(uid);
-    return results ? (results.isAdmin || results.isGlobalModerator || results.isModeratorOfAnyCategory) : false;
+    return results ? (results.isAdmin || results.isInstructor || results.isGlobalModerator || results.isModeratorOfAnyCategory) : false;
 };
 
 User.isAdminOrGlobalMod = async function (uid) {
-    const [isAdmin, isGlobalMod] = await Promise.all([
+    const [isAdmin, isInstructor, isGlobalMod] = await Promise.all([
         User.isAdministrator(uid),
+        User.isInstructor(uid),
         User.isGlobalModerator(uid),
     ]);
-    return isAdmin || isGlobalMod;
+    return isAdmin || isInstructor || isGlobalMod;
 };
 
 User.isAdminOrSelf = async function (callerUid, uid) {
