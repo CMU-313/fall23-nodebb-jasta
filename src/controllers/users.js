@@ -127,8 +127,9 @@ usersController.getUsers = async function (set, uid, query) {
     const start = Math.max(0, page - 1) * resultsPerPage;
     const stop = start + resultsPerPage - 1;
 
-    const [isAdmin, isGlobalMod, canSearch, usersData] = await Promise.all([
+    const [isAdmin, isInstructor, isGlobalMod, canSearch, usersData] = await Promise.all([
         user.isAdministrator(uid),
+        user.isInstructor(uid),
         user.isGlobalModerator(uid),
         privileges.global.can('search:users', uid),
         usersController.getUsersAndCount(set, uid, start, stop),
@@ -140,8 +141,9 @@ usersController.getUsers = async function (set, uid, query) {
         userCount: usersData.count,
         title: setToData[set].title || '[[pages:users/latest]]',
         breadcrumbs: helpers.buildBreadcrumbs(breadcrumbs),
-        isAdminOrGlobalMod: isAdmin || isGlobalMod,
+        isAdminOrGlobalMod: isAdmin || isInstructor || isGlobalMod,
         isAdmin: isAdmin,
+        isInstructor: isInstructor,
         isGlobalMod: isGlobalMod,
         displayUserSearch: canSearch,
         [`section_${query.section || 'joindate'}`]: true,

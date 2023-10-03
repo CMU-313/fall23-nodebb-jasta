@@ -161,8 +161,9 @@ modsController.postQueue = async function (req, res, next) {
     const postsPerPage = 20;
 
     let postData = await posts.getQueuedPosts({ id: id });
-    const [isAdmin, isGlobalMod, moderatedCids, categoriesData] = await Promise.all([
+    const [isAdmin, isInstructor, isGlobalMod, moderatedCids, categoriesData] = await Promise.all([
         user.isAdministrator(req.uid),
+        user.isInstructor(req.id),
         user.isGlobalModerator(req.uid),
         user.getModeratedCids(req.uid),
         helpers.getSelectedCategory(cid),
@@ -170,7 +171,7 @@ modsController.postQueue = async function (req, res, next) {
 
     postData = postData.filter(p => p &&
         (!categoriesData.selectedCids.length || categoriesData.selectedCids.includes(p.category.cid)) &&
-        (isAdmin || isGlobalMod || moderatedCids.includes(Number(p.category.cid)) || req.uid === p.user.uid));
+        (isAdmin || isInstructor || isGlobalMod || moderatedCids.includes(Number(p.category.cid)) || req.uid === p.user.uid));
 
     ({ posts: postData } = await plugins.hooks.fire('filter:post-queue.get', {
         posts: postData,
@@ -190,7 +191,7 @@ modsController.postQueue = async function (req, res, next) {
         title: '[[pages:post-queue]]',
         posts: postData,
         isAdmin: isAdmin,
-        canAccept: isAdmin || isGlobalMod || !!moderatedCids.length,
+        canAccept: isAdmin || isInstructor || isGlobalMod || !!moderatedCids.length,
         ...categoriesData,
         allCategoriesUrl: `post-queue${helpers.buildQueryString(req.query, 'cid', '')}`,
         pagination: pagination.create(page, pageCount),
