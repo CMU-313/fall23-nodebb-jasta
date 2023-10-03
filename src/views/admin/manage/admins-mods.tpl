@@ -38,6 +38,27 @@
 
     <br/>
 
+    <h4><!-- IF instructor.icon --><i class="fa {instructor.icon}"></i> <!-- ENDIF instructor.icon -->[[admin/manage/admins-mods:instructor]]</h4>
+    <div class="instructor-area">
+    <!-- BEGIN instructor.members -->
+        <div class="user-card pull-left" data-uid="{instructor.members.uid}">
+            <!-- IF instructor.members.picture -->
+            <img class="avatar avatar-sm" src="{instructor.members.picture}" alt="" />
+            <!-- ELSE -->
+            <div class="avatar avatar-sm" style="background-color: {instructor.members.icon:bgColor};">{instructor.members.icon:text}</div>
+            <!-- ENDIF instructor.members.picture -->
+            <a href="{config.relative_path}/user/{instructor.members.userslug}">{instructor.members.username}</a>
+            <i class="remove-user-icon fa fa-times" role="button"></i>
+        </div>
+    <!-- END instructor.members -->
+    </div>
+
+    <div id="no-instructor-warning" class="<!-- IF instructor.members.length -->hidden<!-- ENDIF instructor.members.length -->">[[admin/manage/admins-mods:no-instructor]]</div>
+
+    <input id="instructor-search" class="form-control" placeholder="[[admin/manage/admins-mods:add-instructor]]" />
+
+    <br/>
+
     <h4 id="moderators-title">[[admin/manage/admins-mods:moderators]]</h4>
 
     <!-- IMPORT partials/breadcrumbs.tpl -->
