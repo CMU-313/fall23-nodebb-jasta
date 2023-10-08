@@ -31,6 +31,7 @@ describe('Post\'s', () => {
     let postData;
     let topicData;
     let cid;
+    let isAnonymous;
 
     before((done) => {
         async.series({
@@ -1225,6 +1226,32 @@ describe('Post\'s', () => {
                 const events = await topics.events.get(tid1, 1);
                 assert(events);
                 assert.strictEqual(events.length, 0);
+            });
+        });
+    });
+
+    describe('Anonymous Posts', () => {
+        it('should create an anonymous reply', (done) => {
+            topics.post({
+                uid: voterUid,
+                cid: cid,
+                title: 'topic to edit',
+                content: 'A post to for anonymous testing',
+                isAnonymous: isAnonymous,
+            }, (err, data) => {
+                assert.ifError(err);
+                assert.equal(isAnonymous, data.postData.isAnonymous);
+            });
+        });
+        it('should create an anonymous reply', (done) => {
+            topics.reply({
+                uid: voterUid,
+                tid: topicData.tid,
+                content: 'raw content',
+                isAnonymous: isAnonymous
+            }, (err, postData) => {
+                assert.ifError(err);
+                assert.equal(isAnonymous, postData.isAnonymous);
             });
         });
     });
