@@ -1231,7 +1231,7 @@ describe('Post\'s', () => {
     });
 
     describe('Anonymous Posts', () => {
-        it('should create an anonymous reply', (done) => {
+        it('should create an anonymous main post', (done) => {
             topics.post({
                 uid: voterUid,
                 cid: cid,
