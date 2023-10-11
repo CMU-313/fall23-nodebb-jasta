@@ -31,7 +31,6 @@ describe('Post\'s', () => {
     let postData;
     let topicData;
     let cid;
-    let isAnonymous;
 
     before((done) => {
         async.series({
@@ -1231,27 +1230,44 @@ describe('Post\'s', () => {
     });
 
     describe('Anonymous Posts', () => {
-        it('should create an anonymous main post', (done) => {
+        let isAnonymous = true;
+        let studentUid;
+        before((done) => {
+            async.series({
+                studentUid: function (next) {
+                    user.create({ username: 'student' }, next);
+                },
+            }, (err, results) => {
+                if (err) {
+                    return done(err);
+                }
+                studentUid = results.studentUid;
+            });
+        });
+
+        it('should create an anonymous main post', async () => {
             topics.post({
-                uid: voterUid,
-                cid: cid,
+                uid: studentUid,
+                cid,
                 title: 'topic to edit',
                 content: 'A post to for anonymous testing',
                 isAnonymous: isAnonymous,
             }, (err, data) => {
                 assert.ifError(err);
                 assert.equal(isAnonymous, data.postData.isAnonymous);
+                assert.equal("Anonymous User", data.postData.displayname);
             });
         });
-        it('should create an anonymous reply', (done) => {
+        it('should create an anonymous reply', async () => {
             topics.reply({
-                uid: voterUid,
+                uid: studentUid,
                 tid: topicData.tid,
                 content: 'raw content',
                 isAnonymous: isAnonymous
             }, (err, postData) => {
                 assert.ifError(err);
                 assert.equal(isAnonymous, postData.isAnonymous);
+                assert.equal("Anonymous User", postData.displayname);
             });
         });
     });
