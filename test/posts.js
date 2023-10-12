@@ -1236,8 +1236,9 @@ describe('Post\'s', () => {
 
     describe('Anonymous Posts', () => {
         let isAnonymous = true;
+        let TopicPostData;
         it('should create an anonymous main post', async () => {
-            TopicPostData = await topics.post({
+            const TopicPostData = await topics.post({
                 uid: studentUid,
                 cid: cid,
                 title: 'topic with anonymous posts',
@@ -1247,7 +1248,7 @@ describe('Post\'s', () => {
             assert.equal("Anonymous User", data.postData.displayname);
         });
         it('should create an anonymous reply', async () => {
-            postData = await topics.reply({
+            const postData = await topics.reply({
                 uid: studentUid,
                 tid: topicData.tid,
                 content: 'raw content',
@@ -1257,7 +1258,7 @@ describe('Post\'s', () => {
             assert.equal("Anonymous User", postData.displayname);
         });
         it('instuctors should still see user name', async () => {
-            TopicPostData = await topics.post({
+            const TopicPostData = await topics.post({
                 uid: studentUid,
                 cid: cid,
                 title: 'topic with anonymous posts',
