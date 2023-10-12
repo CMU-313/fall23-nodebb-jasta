@@ -83,7 +83,6 @@ module.exports = function (Topics) {
 
         data.title = String(data.title).trim();
         data.tags = data.tags || [];
-        data.isAnonymous = data.tags.includes("anonymous") || data.tags.includes("Anonymous"); 
         if (data.content) {
             data.content = utils.rtrim(data.content);
         }
