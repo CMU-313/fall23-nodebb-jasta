@@ -30,6 +30,7 @@ describe('Post\'s', () => {
     let globalModUid;
     let postData;
     let topicData;
+    let studentUid;
     let cid;
 
     before((done) => {
@@ -42,6 +43,9 @@ describe('Post\'s', () => {
             },
             globalModUid: function (next) {
                 user.create({ username: 'globalmod', password: 'globalmodpwd' }, next);
+            },
+            studentUid: function (next) {
+                user.create({ username: 'student' }, next);
             },
             category: function (next) {
                 categories.create({
@@ -57,6 +61,7 @@ describe('Post\'s', () => {
             voterUid = results.voterUid;
             voteeUid = results.voteeUid;
             globalModUid = results.globalModUid;
+            studentUid = results.studentUid;
             cid = results.category.cid;
 
             topics.post({
@@ -1226,6 +1231,44 @@ describe('Post\'s', () => {
                 assert(events);
                 assert.strictEqual(events.length, 0);
             });
+        });
+    });
+
+    describe('Anonymous Posts', () => {
+        let isAnonymous = true;
+        it('should create an anonymous main post', async () => {
+            TopicPostData = await topics.post({
+                uid: studentUid,
+                cid: cid,
+                title: 'topic with anonymous posts',
+                content: 'Anonymous testing',
+                isAnonymous: isAnonymous});
+            assert.equal(isAnonymous, TopicPostData.postData.isAnonymous);
+            assert.equal("Anonymous User", data.postData.displayname);
+        });
+        it('should create an anonymous reply', async () => {
+            postData = await topics.reply({
+                uid: studentUid,
+                tid: topicData.tid,
+                content: 'raw content',
+                isAnonymous: isAnonymous
+            });
+            assert.equal(isAnonymous, postData.isAnonymous);
+            assert.equal("Anonymous User", postData.displayname);
+        });
+        it('instuctors should still see user name', async () => {
+            TopicPostData = await topics.post({
+                uid: studentUid,
+                cid: cid,
+                title: 'topic with anonymous posts',
+                content: 'Anonymous testing',
+                isAnonymous: isAnonymous});
+            
+            const userPrivileges = await privileges.topics.get(TopicPostData.topicData.tid, globalModUid);
+            topics.modifyPostsByPrivilege(TopicPostData.topicData, userPrivileges);
+
+            assert.equal(isAnonymous, TopicPostData.postData.isAnonymous);
+            assert.equal("Anonymous User (student)", TopicPostData.postData.displayname);
         });
     });
 });
