@@ -1240,7 +1240,7 @@ describe('Post\'s', () => {
             TopicPostData = await topics.post({
                 uid: studentUid,
                 cid: cid,
-                title: 'topic to with anonymous posts',
+                title: 'topic with anonymous posts',
                 content: 'Anonymous testing',
                 isAnonymous: isAnonymous});
             assert.equal(isAnonymous, TopicPostData.postData.isAnonymous);
@@ -1260,7 +1260,7 @@ describe('Post\'s', () => {
             TopicPostData = await topics.post({
                 uid: studentUid,
                 cid: cid,
-                title: 'topic to with anonymous posts',
+                title: 'topic with anonymous posts',
                 content: 'Anonymous testing',
                 isAnonymous: isAnonymous});
             
