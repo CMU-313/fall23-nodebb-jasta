@@ -30,6 +30,7 @@ describe('Post\'s', () => {
     let globalModUid;
     let postData;
     let topicData;
+    let studentUid;
     let cid;
 
     before((done) => {
@@ -42,6 +43,9 @@ describe('Post\'s', () => {
             },
             globalModUid: function (next) {
                 user.create({ username: 'globalmod', password: 'globalmodpwd' }, next);
+            },
+            studentUid: function (next) {
+                user.create({ username: 'student' }, next);
             },
             category: function (next) {
                 categories.create({
@@ -57,6 +61,7 @@ describe('Post\'s', () => {
             voterUid = results.voterUid;
             voteeUid = results.voteeUid;
             globalModUid = results.globalModUid;
+            studentUid = results.studentUid;
             cid = results.category.cid;
 
             topics.post({
@@ -1231,44 +1236,39 @@ describe('Post\'s', () => {
 
     describe('Anonymous Posts', () => {
         let isAnonymous = true;
-        let studentUid;
-        before((done) => {
-            async.series({
-                studentUid: function (next) {
-                    user.create({ username: 'student' }, next);
-                },
-            }, (err, results) => {
-                if (err) {
-                    return done(err);
-                }
-                studentUid = results.studentUid;
-            });
-        });
-
         it('should create an anonymous main post', async () => {
-            topics.post({
+            TopicPostData = await topics.post({
                 uid: studentUid,
-                cid,
-                title: 'topic to edit',
-                content: 'A post to for anonymous testing',
-                isAnonymous: isAnonymous,
-            }, (err, data) => {
-                assert.ifError(err);
-                assert.equal(isAnonymous, data.postData.isAnonymous);
-                assert.equal("Anonymous User", data.postData.displayname);
-            });
+                cid: cid,
+                title: 'topic to with anonymous posts',
+                content: 'Anonymous testing',
+                isAnonymous: isAnonymous});
+            assert.equal(isAnonymous, TopicPostData.postData.isAnonymous);
+            assert.equal("Anonymous User", data.postData.displayname);
         });
         it('should create an anonymous reply', async () => {
-            topics.reply({
+            postData = await topics.reply({
                 uid: studentUid,
                 tid: topicData.tid,
                 content: 'raw content',
                 isAnonymous: isAnonymous
-            }, (err, postData) => {
-                assert.ifError(err);
-                assert.equal(isAnonymous, postData.isAnonymous);
-                assert.equal("Anonymous User", postData.displayname);
             });
+            assert.equal(isAnonymous, postData.isAnonymous);
+            assert.equal("Anonymous User", postData.displayname);
+        });
+        it('instuctors should still see user name', async () => {
+            TopicPostData = await topics.post({
+                uid: studentUid,
+                cid: cid,
+                title: 'topic to with anonymous posts',
+                content: 'Anonymous testing',
+                isAnonymous: isAnonymous});
+            
+            const userPrivileges = await privileges.topics.get(TopicPostData.topicData.tid, globalModUid);
+            topics.modifyPostsByPrivilege(TopicPostData.topicData, userPrivileges);
+
+            assert.equal(isAnonymous, TopicPostData.postData.isAnonymous);
+            assert.equal("Anonymous User (student)", TopicPostData.postData.displayname);
         });
     });
 });
