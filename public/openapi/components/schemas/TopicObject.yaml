@@ -137,8 +137,6 @@ TopicObject:
             index:
               type: number
           nullable: true
-          isAnonymous:
-            type: boolean
         tags:
           type: array
           items:
