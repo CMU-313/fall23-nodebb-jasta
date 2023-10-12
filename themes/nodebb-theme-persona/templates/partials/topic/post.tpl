@@ -8,7 +8,13 @@
 
     <small class="pull-left">
         <strong>
+            <!-- This checks if the user is anonymous, if it is we display "Anonymous User" otherwise it has the user's name -->
+            {{{if isAnonymous}}}
+            Anonymous User
+            {{{else}}}
             <a href="<!-- IF posts.user.userslug -->{config.relative_path}/user/{posts.user.userslug}<!-- ELSE -->#<!-- ENDIF posts.user.userslug -->" itemprop="author" data-username="{posts.user.username}" data-uid="{posts.user.uid}">{posts.user.displayname}</a>
+            {{{end}}}
+            ### <a href="<!-- IF posts.user.userslug -->{config.relative_path}/user/{posts.user.userslug}<!-- ELSE -->#<!-- ENDIF posts.user.userslug -->" itemprop="author" data-username="{posts.user.username}" data-uid="{posts.user.uid}">{posts.user.displayname}</a>
         </strong>
 
         <!-- IMPORT partials/topic/badge.tpl -->

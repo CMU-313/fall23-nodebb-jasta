@@ -73,10 +73,43 @@ describe('Topic\'s', () => {
                 title: topic.title,
                 content: topic.content,
                 cid: topic.categoryId,
+                isAnonymous: topic.isAnonymous,
             }, (err, result) => {
                 assert.ifError(err);
                 assert(result);
                 topic.tid = result.topicData.tid;
+                done();
+            });
+        });
+
+        it('should create anonymous topic/post', (done) => {
+            topics.post({
+                uid: topic.userId,
+                title: topic.title,
+                content: topic.content,
+                cid: topic.categoryId,
+                isAnonymous: true,
+            }, (err, result) => {
+                assert.ifError(err);
+                assert(result);
+                topic.tid = result.topicData.tid;
+                assert(result.topicData.isAnononymous);
+                done();
+            });
+        });
+
+        it('should create a not anonymous topic/post', (done) => {
+            topics.post({
+                uid: topic.userId,
+                title: topic.title,
+                content: topic.content,
+                cid: topic.categoryId,
+                isAnononymous: false,
+            }, (err, result) => {
+                assert.ifError(err);
+                assert(result);
+                topic.tid = result.topicData.tid;
+                assert.equal(result.topicData.isAnononymous, false);
                 done();
             });
         });
