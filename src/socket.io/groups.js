@@ -50,7 +50,7 @@ async function isOwner(socket, data) {
     });
 
     const isOwner = results.isOwner ||
-        results.hasAdminPrivilege || isInstructor ||
+        results.hasAdminPrivilege || results.isInstructor ||
         (results.isGlobalModerator && !results.group.system);
     if (!isOwner) {
         throw new Error('[[error:no-privileges]]');
