@@ -1246,7 +1246,7 @@ describe('Post\'s', () => {
             });
 
             assert.equal(isAnonymous, TopicPostData.postData.isAnonymous);
-            assert.equal('Anonymous User', TopicPostData.postData.displayname);
+            assert.strictEqual('Anonymous User', TopicPostData.postData.user.displayname);
         });
         it('should create an anonymous reply', async () => {
             const postData = await topics.reply({
@@ -1256,7 +1256,7 @@ describe('Post\'s', () => {
                 isAnonymous: isAnonymous,
             });
             assert.equal(isAnonymous, postData.isAnonymous);
-            assert.equal('Anonymous User', postData.displayname);
+            assert.equal('Anonymous User', postData.user.displayname);
         });
         it('instuctors should still see user name', async () => {
             const TopicPostData = await topics.post({
@@ -1270,7 +1270,7 @@ describe('Post\'s', () => {
             topics.modifyPostsByPrivilege(TopicPostData.topicData, userPrivileges);
 
             assert.equal(isAnonymous, TopicPostData.postData.isAnonymous);
-            assert.equal('Anonymous User (student)', TopicPostData.postData.displayname);
+            assert.equal('Anonymous User (student)', TopicPostData.postData.user.displayname);
         });
     });
 });
