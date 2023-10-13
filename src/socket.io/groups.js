@@ -43,14 +43,14 @@ async function isOwner(socket, data) {
     }
     const results = await utils.promiseParallel({
         hasAdminPrivilege: privileges.admin.can('admin:groups', socket.uid),
-        isInstructor: privileges.isInstructor(socket.uid),
+        isInstructor: user.isInstructor(socket.uid),
         isGlobalModerator: user.isGlobalModerator(socket.uid),
         isOwner: groups.ownership.isOwner(socket.uid, data.groupName),
         group: groups.getGroupData(data.groupName),
     });
 
     const isOwner = results.isOwner ||
-        results.hasAdminPrivilege || results.isInstructor ||
+        results.hasAdminPrivilege || isInstructor ||
         (results.isGlobalModerator && !results.group.system);
     if (!isOwner) {
         throw new Error('[[error:no-privileges]]');
