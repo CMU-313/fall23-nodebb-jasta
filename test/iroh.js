@@ -15,16 +15,16 @@ foo('Sophia', 20);
 // code adapted from example given on Iroh.js website
 // function call
 stage.addListener(Iroh.CALL)
-  .on('before', (e) => {
-    const external = e.external ? '#external' : '';
-    console.log(" ".repeat(e.indent) + 'call', e.name, external, '(', e.arguments, ')');
-    //console.log(e.getSource());
-  })
-  .on('after', (e) => {
-    const external = e.external ? '#external' : '';
-    console.log(' '.repeat(e.indent) + 'call', e.name, 'end', external, '->', [e.return]);
-    //console.log(e.getSource());
-  });
+    .on('before', (e) => {
+      const external = e.external ? '#external' : '';
+      console.log(' '.repeat(e.indent) + 'call', e.name, external, '(', e.arguments, ')');
+      //console.log(e.getSource());
+    })
+    .on('after', (e) => {
+      const external = e.external ? '#external' : '';
+      console.log(' '.repeat(e.indent) + 'call', e.name, 'end', external, '->', [e.return]);
+      //console.log(e.getSource());
+    });
 
 // function
 stage.addListener(Iroh.FUNCTION)
