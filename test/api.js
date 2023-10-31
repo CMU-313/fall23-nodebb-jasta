@@ -506,7 +506,6 @@ describe('API', async () => {
     function compare(schema, response, method, path, context) {
         let required = [];
         const additionalProperties = schema.hasOwnProperty('additionalProperties');
-
         function flattenAllOf(obj) {
             return obj.reduce((memo, obj) => {
                 if (obj.allOf) {

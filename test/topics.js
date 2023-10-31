@@ -73,6 +73,7 @@ describe('Topic\'s', () => {
                 title: topic.title,
                 content: topic.content,
                 cid: topic.categoryId,
+                isAnonymous: topic.isAnonymous,
             }, (err, result) => {
                 assert.ifError(err);
                 assert(result);
