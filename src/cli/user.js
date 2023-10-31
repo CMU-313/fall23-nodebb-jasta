@@ -53,6 +53,10 @@ module.exports = () => {
         .description('Make user(s) a global moderator')
         .arguments('<uids...>')
         .action((...args) => execute(userCommands.makeGlobalMod, args));
+    make.command('instructor')
+        .description('Make user(s) an instructor')
+        .arguments('<uids...')
+        .action((...args) => execute(userCommands.makeInstructor, args));
     make.command('mod')
         .description('Make uid(s) of user(s) moderator of given category IDs (cids)')
         .arguments('<uids...>')
@@ -276,6 +280,13 @@ ${pwGenerated ? ` Generated password: ${password}` : ''}`);
         winston.info('[userCmd/make/globalMod] User(s) added as global moderators.');
     }
 
+    async function makeInstructor(uids) {
+        uids.argParsers.intArrayParse(uids, 'uids');
+        await Promise.all(uids.map(uid => groups.join('Instructor', uid)));
+
+        winston.info('[userCmd/make/instructor] User(s) added as instructor.');
+    }
+
     async function makeMod(uids, { cid: cids }) {
         uids = argParsers.intArrayParse(uids, 'uids');
         cids = argParsers.intArrayParse(cids, 'cids');
@@ -289,7 +300,7 @@ ${pwGenerated ? ` Generated password: ${password}` : ''}`);
     async function makeRegular(uids) {
         uids = argParsers.intArrayParse(uids, 'uids');
 
-        await Promise.all(uids.map(uid => groups.leave(['administrators', 'Global Moderators'], uid)));
+        await Promise.all(uids.map(uid => groups.leave(['administrators', 'Instructor', 'Global Moderators'], uid)));
 
         const categoryPrivList = await privileges.categories.getPrivilegeList();
         const cids = await db.getSortedSetRevRange('categories:cid', 0, -1);
@@ -305,6 +316,7 @@ ${pwGenerated ? ` Generated password: ${password}` : ''}`);
         deleteUser,
         makeAdmin,
         makeGlobalMod,
+        makeInstructor,
         makeMod,
         makeRegular,
     };

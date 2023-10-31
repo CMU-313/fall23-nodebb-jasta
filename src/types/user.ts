@@ -64,6 +64,7 @@ export type UserObjectFull = UserObject & {
   theirid: number;
   isTargetAdmin: boolean;
   isAdmin: boolean;
+  isInstructor: boolean;
   isGlobalModerator: boolean;
   isModerator: boolean;
   isAdminOrGlobalModerator: boolean;
@@ -120,6 +121,7 @@ export type Visibility = {
   other: boolean;
   moderator: boolean;
   globalMod: boolean;
+  instructor: boolean;
   admin: boolean;
   canViewInfo: boolean;
 };

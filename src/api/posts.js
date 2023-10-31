@@ -103,6 +103,7 @@ postsAPI.edit = async function (caller, data) {
 
     const memberData = await groups.getMembersOfGroups([
         'administrators',
+        'Instructor',
         'Global Moderators',
         `cid:${editResult.topic.cid}:privileges:moderate`,
         `cid:${editResult.topic.cid}:privileges:groups:moderate`,

@@ -32,6 +32,7 @@ Groups.systemGroups = [
     'unverified-users',
     Groups.BANNED_USERS,
     'administrators',
+    'instructor',
     'Global Moderators',
 ];
 

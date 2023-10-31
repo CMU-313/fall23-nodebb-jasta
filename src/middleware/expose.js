@@ -26,6 +26,7 @@ module.exports = function (middleware) {
         // Exposes a hash of user's ranks (admin, gmod, etc.)
         const hash = await utils.promiseParallel({
             isAdmin: user.isAdministrator(req.user.uid),
+            isInstructor: user.isInstructor(req.user.uid),
             isGmod: user.isGlobalModerator(req.user.uid),
             isPrivileged: user.isPrivileged(req.user.uid),
         });

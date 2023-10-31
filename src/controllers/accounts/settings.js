@@ -184,10 +184,10 @@ async function getNotificationSettings(userData) {
     if (privileges.isAdmin) {
         privilegedTypes.push('notificationType_new-register');
     }
-    if (privileges.isAdmin || privileges.isGlobalMod || privileges.isModeratorOfAnyCategory) {
+    if (privileges.isAdmin || privileges.isInstructor || privileges.isGlobalMod || privileges.isModeratorOfAnyCategory) {
         privilegedTypes.push('notificationType_post-queue', 'notificationType_new-post-flag');
     }
-    if (privileges.isAdmin || privileges.isGlobalMod) {
+    if (privileges.isAdmin || privileges.isInstructor || privileges.isGlobalMod) {
         privilegedTypes.push('notificationType_new-user-flag');
     }
     const results = await plugins.hooks.fire('filter:user.notificationTypes', {

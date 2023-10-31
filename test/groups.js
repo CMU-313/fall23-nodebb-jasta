@@ -58,6 +58,16 @@ describe('Groups', () => {
             disableJoinRequests: 1,
         });
 
+        // create instructor group
+        await Groups.create({
+            name: 'Instructor',
+            userTitle: 'Instructor',
+            description: 'Instructor for the class',
+            hidden: 0,
+            private: 1,
+            disableJoinRequests: 1,
+        });
+
         // Also create a hidden group
         await Groups.join('Hidden', 'Test');
         // create another group that starts with test for search/sort
@@ -80,7 +90,8 @@ describe('Groups', () => {
         it('should list the groups present', (done) => {
             Groups.getGroupsFromSet('groups:visible:createtime', 0, -1, (err, groups) => {
                 assert.ifError(err);
-                assert.equal(groups.length, 5);
+                // change from equal to 5 to 6 bc of creation of Instructor group
+                assert.equal(groups.length, 6);
                 done();
             });
         });
@@ -128,7 +139,8 @@ describe('Groups', () => {
         it('should return the groups when search query is empty', (done) => {
             socketGroups.search({ uid: adminUid }, { query: '' }, (err, groups) => {
                 assert.ifError(err);
-                assert.equal(5, groups.length);
+                // change from equal to 5 to 6 bc of creation of Instructor group
+                assert.equal(6, groups.length);
                 done();
             });
         });
@@ -667,6 +679,15 @@ describe('Groups', () => {
             await apiGroups.join({ uid: adminUid }, { slug: slug, uid: uid });
             const isGlobalMod = await User.isGlobalModerator(uid);
             assert.strictEqual(isGlobalMod, true);
+        });
+
+        // add check for Instructor group
+        it('should add user to Instructor group', async () => {
+            const uid = await User.create({ username: 'instr' });
+            const slug = await Groups.getGroupField('Instructor', 'slug');
+            await apiGroups.join({ uid: adminUid }, { slug: slug, uid: uid });
+            const isInstructor = await User.isInstructor(uid);
+            assert.strictEqual(isInstructor, true);
         });
 
         it('should add user to multiple groups', (done) => {
