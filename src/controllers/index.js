@@ -32,6 +32,8 @@ Controllers.authentication = require('./authentication');
 Controllers.api = require('./api');
 Controllers.admin = require('./admin');
 Controllers.globalMods = require('./globalmods');
+Controllers.instructor = require('./instructor');
+Controllers.ta = require('./ta');
 Controllers.mods = require('./mods');
 Controllers.sitemap = require('./sitemap');
 Controllers.osd = require('./osd');
@@ -187,7 +189,6 @@ Controllers.register = async function (req, res, next) {
                     html: `
                         <select class="form-control" name="account-type" aria-label="Account Type">
                             <option value="student" selected>Student</option>
-                            <option value="instructor">Instructor</option>
                         </select>
                     `,
                 },

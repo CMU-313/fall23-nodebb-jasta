@@ -31,6 +31,8 @@ helpers.getUserDataByUserSlug = async function (userslug, callerUID, query = {})
     let { userData } = results;
     const { userSettings } = results;
     const { isAdmin } = results;
+    const { isInstructor } = results;
+    const { isTA } = results;
     const { isGlobalModerator } = results;
     const { isModerator } = results;
     const { canViewInfo } = results;
@@ -53,7 +55,7 @@ helpers.getUserDataByUserSlug = async function (userslug, callerUID, query = {})
         userData.ips = results.ips;
     }
 
-    if (!isAdmin && !isGlobalModerator && !isModerator) {
+    if (!isAdmin && !isInstructor && !isGlobalModerator && !isModerator && !isTA) {
         userData.moderationNote = undefined;
     }
 
@@ -62,11 +64,13 @@ helpers.getUserDataByUserSlug = async function (userslug, callerUID, query = {})
     userData.theirid = userData.uid;
     userData.isTargetAdmin = results.isTargetAdmin;
     userData.isAdmin = isAdmin;
+    userData.isInstructor = isInstructor;
+    userData.isTA = isTA;
     userData.isGlobalModerator = isGlobalModerator;
     userData.isModerator = isModerator;
-    userData.isAdminOrGlobalModerator = isAdmin || isGlobalModerator;
-    userData.isAdminOrGlobalModeratorOrModerator = isAdmin || isGlobalModerator || isModerator;
-    userData.isSelfOrAdminOrGlobalModerator = isSelf || isAdmin || isGlobalModerator;
+    userData.isAdminOrGlobalModerator = isAdmin || isInstructor || isTA || isGlobalModerator;
+    userData.isAdminOrGlobalModeratorOrModerator = isAdmin || isInstructor || isTA || isGlobalModerator || isModerator;
+    userData.isSelfOrAdminOrGlobalModerator = isSelf || isAdmin || isGlobalModerator || isInstructor || isTA;
     userData.canEdit = results.canEdit;
     userData.canBan = results.canBanUser;
     userData.canMute = results.canMuteUser;
@@ -86,6 +90,8 @@ helpers.getUserDataByUserSlug = async function (userslug, callerUID, query = {})
         other: !isSelf,
         moderator: isModerator,
         globalMod: isGlobalModerator,
+        instructor: isInstructor,
+        TA: isTA,
         admin: isAdmin,
         canViewInfo: canViewInfo,
     });
@@ -133,6 +139,8 @@ async function getAllData(uid, callerUID) {
         isTargetAdmin: user.isAdministrator(uid),
         userSettings: user.getSettings(uid),
         isAdmin: user.isAdministrator(callerUID),
+        isInstructor: user.isInstructor(callerUID),
+        isTA: user.isTA(callerUID),
         isGlobalModerator: user.isGlobalModerator(callerUID),
         isModerator: user.isModeratorOfAnyCategory(callerUID),
         isFollowing: user.isFollowing(callerUID, uid),
@@ -190,6 +198,8 @@ async function getProfileMenu(uid, callerUID) {
             other: false,
             moderator: false,
             globalMod: false,
+            instructor: true,
+            TA: true,
             admin: true,
             canViewInfo: true,
         },
@@ -203,6 +213,8 @@ async function getProfileMenu(uid, callerUID) {
             other: false,
             moderator: false,
             globalMod: false,
+            instructor: false,
+            TA: false,
             admin: false,
             canViewInfo: false,
         },
@@ -219,6 +231,8 @@ async function getProfileMenu(uid, callerUID) {
                 other: false,
                 moderator: false,
                 globalMod: false,
+                instructor: false,
+                TA: false,
                 admin: false,
                 canViewInfo: false,
             },
@@ -252,6 +266,8 @@ function filterLinks(links, states) {
             other: true,
             moderator: true,
             globalMod: true,
+            instructor: true,
+            TA: true,
             admin: true,
             canViewInfo: true,
             ...link.visibility,

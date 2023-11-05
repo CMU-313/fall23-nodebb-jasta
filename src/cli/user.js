@@ -53,6 +53,14 @@ module.exports = () => {
         .description('Make user(s) a global moderator')
         .arguments('<uids...>')
         .action((...args) => execute(userCommands.makeGlobalMod, args));
+    make.command('instructor')
+        .description('Make user(s) an instructor')
+        .arguments('<uids...>')
+        .action((...args) => execute(userCommands.makeInstructor, args));
+    make.command('TA')
+        .description('Make user(s) a TA')
+        .arguments('<uids...>')
+        .action((...args) => execute(userCommands.makeTA, args));
     make.command('mod')
         .description('Make uid(s) of user(s) moderator of given category IDs (cids)')
         .arguments('<uids...>')
@@ -276,6 +284,20 @@ ${pwGenerated ? ` Generated password: ${password}` : ''}`);
         winston.info('[userCmd/make/globalMod] User(s) added as global moderators.');
     }
 
+    async function makeInstructor(uids) {
+        uids = argParsers.intArrayParse(uids, 'uids');
+        await Promise.all(uids.map(uid => groups.join('Instructor', uid)));
+
+        winston.info('[userCmd/make/instructor] User(s) added as an instructor.');
+    }
+
+    async function makeTA(uids) {
+        uids = argParsers.intArrayParse(uids, 'uids');
+        await Promise.all(uids.map(uid => groups.join('TA', uid)));
+
+        winston.info('[userCmd/make/ta] User(s) added as a TA.');
+    }
+
     async function makeMod(uids, { cid: cids }) {
         uids = argParsers.intArrayParse(uids, 'uids');
         cids = argParsers.intArrayParse(cids, 'cids');
@@ -289,7 +311,7 @@ ${pwGenerated ? ` Generated password: ${password}` : ''}`);
     async function makeRegular(uids) {
         uids = argParsers.intArrayParse(uids, 'uids');
 
-        await Promise.all(uids.map(uid => groups.leave(['administrators', 'Global Moderators'], uid)));
+        await Promise.all(uids.map(uid => groups.leave(['administrators', 'Global Moderators', 'Instructor', 'TA'], uid)));
 
         const categoryPrivList = await privileges.categories.getPrivilegeList();
         const cids = await db.getSortedSetRevRange('categories:cid', 0, -1);
@@ -305,6 +327,8 @@ ${pwGenerated ? ` Generated password: ${password}` : ''}`);
         deleteUser,
         makeAdmin,
         makeGlobalMod,
+        makeInstructor,
+        makeTA,
         makeMod,
         makeRegular,
     };

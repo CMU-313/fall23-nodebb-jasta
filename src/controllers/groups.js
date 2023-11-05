@@ -42,16 +42,18 @@ groupsController.details = async function (req, res, next) {
     if (!groupName) {
         return next();
     }
-    const [exists, isHidden, isAdmin, isGlobalMod] = await Promise.all([
+    const [exists, isHidden, isAdmin, isGlobalMod, isInstructor, isTA] = await Promise.all([
         groups.exists(groupName),
         groups.isHidden(groupName),
         user.isAdministrator(req.uid),
         user.isGlobalModerator(req.uid),
+        user.isInstructor(req.uid),
+        user.isTA(req.uid),
     ]);
     if (!exists) {
         return next();
     }
-    if (isHidden && !isAdmin && !isGlobalMod) {
+    if (isHidden && !isAdmin && !isGlobalMod && !isInstructor && !isTA) {
         const [isMember, isInvited] = await Promise.all([
             groups.isMember(req.uid, groupName),
             groups.isInvited(req.uid, groupName),
@@ -71,7 +73,7 @@ groupsController.details = async function (req, res, next) {
     if (!groupData) {
         return next();
     }
-    groupData.isOwner = groupData.isOwner || isAdmin || (isGlobalMod && !groupData.system);
+    groupData.isOwner = groupData.isOwner || isAdmin || (isGlobalMod && !groupData.system) || isInstructor;
 
     res.render('groups/details', {
         title: `[[pages:group, ${groupData.displayName}]]`,
@@ -79,6 +81,8 @@ groupsController.details = async function (req, res, next) {
         posts: posts,
         isAdmin: isAdmin,
         isGlobalMod: isGlobalMod,
+        isInstructor: isInstructor,
+        isTA: isTA,
         allowPrivateGroups: meta.config.allowPrivateGroups,
         breadcrumbs: helpers.buildBreadcrumbs([{ text: '[[pages:groups]]', url: '/groups' }, { text: groupData.displayName }]),
     });

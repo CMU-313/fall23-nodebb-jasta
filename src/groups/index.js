@@ -33,6 +33,8 @@ Groups.systemGroups = [
     Groups.BANNED_USERS,
     'administrators',
     'Global Moderators',
+    'Instructor',
+    'TA',
 ];
 
 Groups.getEphemeralGroup = function (groupName) {

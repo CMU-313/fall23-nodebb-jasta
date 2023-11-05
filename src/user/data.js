@@ -152,17 +152,19 @@ module.exports = function (User) {
             single = true;
         }
 
-        const [userSettings, isAdmin, isGlobalModerator] = await Promise.all([
+        const [userSettings, isAdmin, isGlobalModerator, isInstructor, isTA] = await Promise.all([
             User.getMultipleUserSettings(users.map(user => user.uid)),
             User.isAdministrator(callerUID),
             User.isGlobalModerator(callerUID),
+            User.isInstructor(callerUID),
+            User.isTA(callerUID),
         ]);
 
         users = await Promise.all(users.map(async (userData, idx) => {
             const _userData = { ...userData };
 
             const isSelf = parseInt(callerUID, 10) === parseInt(_userData.uid, 10);
-            const privilegedOrSelf = isAdmin || isGlobalModerator || isSelf;
+            const privilegedOrSelf = isAdmin || isGlobalModerator || isSelf || isInstructor || isTA;
 
             if (!privilegedOrSelf && (!userSettings[idx].showemail || meta.config.hideEmail)) {
                 _userData.email = '';

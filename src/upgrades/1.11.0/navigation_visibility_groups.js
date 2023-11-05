@@ -12,6 +12,10 @@ module.exports = {
                     navItem.groups.push('administrators');
                 } else if (navItem.properties.globalMod) {
                     navItem.groups.push('Global Moderators');
+                } else if (navItem.properties.instructor) {
+                    navItem.groups.push('Instructor');
+                } else if (navItem.properties.TA) {
+                    navItem.groups.push('TA');
                 }
 
                 if (navItem.properties.loggedIn) {

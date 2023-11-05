@@ -431,8 +431,50 @@ async function giveGlobalPrivileges() {
     await privileges.global.give(defaultPrivileges.concat([
         'groups:ban', 'groups:upload:post:file', 'groups:view:users:info',
     ]), 'Global Moderators');
+    await privileges.global.give(defaultPrivileges.concat([
+        'groups:ban', 'groups:upload:post:file', 'groups:view:users:info',
+    ]), 'Instructor');
+    await privileges.global.give(defaultPrivileges.concat([
+        'groups:ban', 'groups:upload:post:file', 'groups:view:users:info',
+    ]), 'TA');
     await privileges.global.give(['groups:view:users', 'groups:view:tags', 'groups:view:groups'], 'guests');
     await privileges.global.give(['groups:view:users', 'groups:view:tags', 'groups:view:groups'], 'spiders');
+}
+
+async function createInstructorGroup() {
+    const groups = require('./groups');
+    const exists = await groups.exists('Instructor');
+    if (exists) {
+        winston.info('Instructor group found, skipping creation!');
+    } else {
+        await groups.create({
+            name: 'Instructor',
+            userTitle: 'Instructor',
+            description: 'Instructor for the course',
+            hidden: 0,
+            private: 1,
+            disableJoinRequests: 1,
+        });
+    }
+    await groups.show('Instructor');
+}
+
+async function createTAGroup() {
+    const groups = require('./groups');
+    const exists = await groups.exists('TA');
+    if (exists) {
+        winston.info('TA group found, skipping creation!');
+    } else {
+        await groups.create({
+            name: 'TA',
+            userTitle: 'TA',
+            description: 'Teaching assistant for the course',
+            hidden: 0,
+            private: 1,
+            disableJoinRequests: 1,
+        });
+    }
+    await groups.show('TA');
 }
 
 async function createCategories() {
@@ -574,6 +616,8 @@ install.setup = async function () {
         await createDefaultUserGroups();
         const adminInfo = await createAdministrator();
         await createGlobalModeratorsGroup();
+        await createInstructorGroup();
+        await createTAGroup();
         await giveGlobalPrivileges();
         await createMenuItems();
         await createWelcomePost();
